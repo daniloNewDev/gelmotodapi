@@ -1,9 +1,16 @@
 import { Request, Response } from "express"
 
-import WorkOrder from "../models/WorkOrder"
+import { WorkOrder } from "../models/workOrders"
 
-import Logger from "../config/logger"
+import Logger from "../../config/logger"
 
 export async function createWorkOrder(req: Request, res: Response) {
-  return res.status(200).send("Funcionou o controller")
+  try {
+    const data = req.body
+    const workOrder = await WorkOrder.create(data)
+    return res.status(201).json(workOrder)
+
+  } catch (e: any) {
+    Logger.error(`Erro no sistema: ${e.message}`)
+  }
 }
